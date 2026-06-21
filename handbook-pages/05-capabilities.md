@@ -105,11 +105,12 @@ Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modul
 
 It will:
 
-- Upgrade your `core.js` into a Slack bot — same brain, new face
-- Import your `askTwin()` function and call it from the Slack event listener
+- Add `slack-bot.js` — a Slack listener that imports `askTwin()` from your `core.js`. Same brain, new face. Your `core.js` stays untouched.
+- Add `slack-mcp.js` — an MCP server so the twin can send, edit, delete Slack messages on its own
 - Create per-thread sessions so each Slack conversation has its own memory
-- Add an MCP server (`slack-mcp.js`) so the twin can send, edit, delete messages on its own
 - Set up a state machine (idle/busy/draining) to prevent double-responses
+- Add attention gating — the bot goes dormant when humans talk without @mentioning it
+- Add thread commands — `!cancel`, `!reset`, `!status` for managing the bot in Slack
 - Ask you for the two tokens and put them in `.env`
 
 ### Verify
@@ -137,8 +138,9 @@ Connect Gmail so your twin can read your unread email and draft replies in your 
    ```
    Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modules/tree/main/capabilities-module and set up email capabilities for my twin.
    ```
-   It installs a Skill that teaches the twin when and how to read email + draft replies, plus
-   an MCP quickstart guide for adding more tools.
+   It installs a Skill for email reading + reply drafting, a `/reply` command for one-off
+   replies, and an **MCP Quickstart** guide (`MCP_QUICKSTART.md`) that shows you how to add
+   any MCP server to your twin.
 
 **Try it:** Tell your twin "read my emails and draft replies." It reads your unread inbox,
 drafts a reply to each in your voice, and saves them to `drafts/replies-<date>.md`.
@@ -186,9 +188,12 @@ past detail before every reply.
 ```
 Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modules/tree/main/memory-module and set up memory for my twin.
 ```
-It installs a SQLite+FTS5 memory store with scored recall, an MCP server (`memory-mcp.js`)
-so the agent can recall/remember via tools, and replaces your JSON memory functions with a
-proper search-and-rank system.
+It installs:
+- `memory-store.js` — a SQLite+FTS5 engine with scored recall (BM25 + recency + importance)
+- `memory.js` — a drop-in replacement for your `recallContext()` and `remember()` functions
+- `memory-mcp.js` — an MCP server so the agent can recall, remember, add facts/lessons, and
+  consolidate stale memories via tools
+- `memory-cli.js` — a CLI for inspecting and managing memories manually
 
 **Try it:** Have a conversation, restart the twin, then ask about something from earlier.
 The twin should recall the right detail without being told to look it up.
