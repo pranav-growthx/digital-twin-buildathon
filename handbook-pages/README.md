@@ -9,7 +9,7 @@
 
 ## Build
 
-3. [Ideation](03-ideation.md) — Define your agent (~15 min)
+3. [Building the Personality](03-building-the-personality.md) — Define how your agent talks (~15 min)
 4. [Build It](04-build-it.md) — Your core win (~60 min)
 5. [Capabilities](05-capabilities.md) — Go live on Slack, add capabilities (bonus)
 6. [Demo](06-demo.md) — Polish and show it on stage (~15 min)
@@ -20,5 +20,5 @@
 
 ## Starter Files
 
-- [IDEATION.md](starter-files/IDEATION.md) — The rules your AI follows for the ideation interview
+- [IDEATION.md](starter-files/IDEATION.md) — The rules your AI follows for the personality interview
 - [BUILDING.md](starter-files/BUILDING.md) — The rules Claude Code follows to build your agent
