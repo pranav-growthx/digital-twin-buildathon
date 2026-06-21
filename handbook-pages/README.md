@@ -5,7 +5,7 @@
 ## Start Here
 
 1. [Welcome](01-welcome.md) — What today is and how to get the most from it
-2. [Before You Arrive](02-before-you-arrive.md) — Install everything tonight (~15 minutes)
+2. [Laptop Setup](02-before-you-arrive.md) — Install everything before you arrive (~15 minutes)
 
 ## Build
 

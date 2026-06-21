@@ -1,90 +1,186 @@
-# Before You Arrive
+# GrowthX Buildathon — Laptop Setup
 
-> **Setup**
-
-Install everything tonight — about 15 minutes.
+> **Do this _before_ you arrive — about 15 minutes.**
+> The event is 3 hours of *building*, not installing. If your laptop is ready the night before, you can start the moment you sit down. Stuck on a step? Come 15 minutes early and a mentor will help.
 
 ---
 
-Spend about **15 minutes tonight** so you arrive ready to build. You only need two things: **Node.js** and **one AI tool** (Claude Code recommended). Once Claude is installed, it can set up anything else for you on the day — so this list is short on purpose.
+## What you'll need
 
-> You don't need to understand all of it. Install it, run the check at the bottom, and you're set. Mentors will fix anything that didn't work tomorrow.
+- A **laptop** (Windows or Mac) where you can install software (admin rights).
+- An **AI subscription** you can log in to — one of:
+  - **Claude Pro / Max** — *recommended* (powers **Claude Code**)
+  - **ChatGPT Plus / Pro** (powers **Codex**)
+- About **15 minutes**.
 
-> Use the **Tool** and **Computer** sections below to match what you have.
+You'll set up five things, in order:
 
-## 1. Install Node.js
+**Node.js → an IDE → your AI tool → Python → Git**
 
-### Windows
+---
 
-1. Go to **nodejs.org** and download the **LTS** version.
-2. Run the installer (keep clicking Next).
-3. Open your **terminal (PowerShell)** — you'll use it in the next step.
+## Step 1 — Install Node.js
 
-### macOS
+> Your AI tool is installed and runs through Node.js.
 
-1. Go to **nodejs.org**, download the **LTS** version, and install it.
-2. Open the **Terminal app** — you'll use it in the next step.
+**Windows**
+1. Go to **[nodejs.org](https://nodejs.org)** and download the **LTS** version.
+2. Run the installer and click through (Next → Next → Finish).
 
-## 2. Install your AI tool
+Prefer the terminal?
+```powershell
+winget install OpenJS.NodeJS.LTS
+```
 
-Install **Claude Code first** — once it's running and signed in, it can install everything else you need (even Python) for you.
+**macOS**
+1. Go to **[nodejs.org](https://nodejs.org)** and download the **macOS LTS** (`.pkg`).
+2. Run the installer.
 
-### Claude Code
+Have [Homebrew](https://brew.sh)?
+```bash
+brew install node
+```
 
-In your terminal:
+---
 
+## Step 2 — Install your Code-Editor (your workspace)
+
+> An IDE is the app where you'll see your files and run commands. It has a built-in **terminal** you'll use in the next step.
+
+Pick **one** (each site has Windows & macOS downloads):
+
+| IDE | Notes |
+|-----|-------|
+| **[VS Code](https://code.visualstudio.com)** | Recommended — free, simple, works everywhere |
+| **[Google Antigravity](https://antigravity.google)** | AI-first IDE |
+| **[Cursor](https://cursor.com)** | AI-first IDE |
+
+> Not sure? **Choose VS Code.** Antigravity and Cursor are also built on VS Code, so the steps below are identical. (They have their own built-in AI, but for this build everyone uses Claude Code in the terminal.)
+
+Download your chosen IDE, install it, and **open it**.
+
+---
+
+## Step 3 — Install your AI tool (in the IDE terminal)
+
+**1. Open the built-in terminal** inside your IDE:
+- Menu: **Terminal → New Terminal**, or
+- Shortcut: **Ctrl + `** (Windows) / **Cmd + `** (macOS) — the key above Tab.
+
+A terminal panel opens at the bottom. **2. Type the command for your tool:**
+
+**Claude Code** (recommended)
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
 
-Then start it and sign in with your Claude account:
-
-```bash
-claude
-```
-
-Sign in when it asks, then type `/exit` to return to the terminal.
-
-### Codex (alternative)
-
-In your terminal:
-
+**Codex** (alternative)
 ```bash
 npm install -g @openai/codex
 ```
 
-Then sign in:
+> If it says **"npm is not recognized"**, close the IDE and reopen it (so it picks up Node from Step 1), then open the terminal again.
 
+---
+
+## Step 4 — Log in to your AI tool
+
+In the same terminal:
+
+**Claude Code** — run `claude`, then sign in with your Claude account in the browser window that opens. Type `/exit` when done.
+```bash
+claude
+```
+
+**Codex**
 ```bash
 codex login
 ```
 
-## 3. Python (optional)
+---
 
-You only need Python if you choose the Python path tomorrow — and your AI tool can install it for you once it's running. **You can skip this for now.**
+## Step 5 — Install Python
 
-## Final check
+> The default build uses Python. *Building in JavaScript instead? Node from Step 1 is enough — skip this step.*
 
-In your terminal, confirm Node is installed:
+**Windows**
+1. Go to **[python.org/downloads](https://www.python.org/downloads/)** and download Python.
+2. Run the installer — **tick "Add Python to PATH"** at the bottom — then click **Install Now**.
 
+**macOS**
+1. Go to **[python.org/downloads](https://www.python.org/downloads/)** and run the macOS installer.
+
+Have Homebrew?
+```bash
+brew install python
+```
+
+---
+
+## Step 6 — Install Git
+
+> During the build you'll "checkpoint" your work so you never lose it. Git makes that possible.
+
+**Windows**
+1. Go to **[git-scm.com/download/win](https://git-scm.com/download/win)**, download, and run the installer (accept the defaults).
+
+Prefer the terminal?
+```powershell
+winget install Git.Git
+```
+
+**macOS**
+1. Run the line below. If Git isn't installed, macOS pops up an **Install** button — click it.
+```bash
+git --version
+```
+
+Have Homebrew?
+```bash
+brew install git
+```
+
+---
+
+## Step 7 — Verify everything works
+
+In your IDE terminal, run these — each should print a version, not an error:
+
+**Windows**
+```powershell
+node --version
+python --version
+git --version
+claude --version
+```
+
+**macOS**
 ```bash
 node --version
+python3 --version
+git --version
+claude --version
 ```
 
-You should see a version like `v20.x` (not an error). Then check your AI tool replies:
+> Codex users: use `codex --version` instead of `claude --version`.
 
-**Claude Code:**
+**Final test — can your AI tool answer?**
 
 ```bash
-claude -p "say hi in one word"
+claude -p "say hello in one word"
 ```
-
-**Codex:**
-
+Codex:
 ```bash
-echo "say hi in one word" | codex exec -
+echo "say hello in one word" | codex exec -
 ```
 
-> Got a version number and a one-word reply? You're ready — see you tomorrow.
+A one-word reply means you're ready for the build.
 
-> We may share a one-step setup script on the day, but doing this tonight means you can start building right away.
+---
+
+## If something goes wrong
+
+- **"not recognized" / "command not found"** → close your IDE and reopen it (the terminal picks up new installs), then try again.
+- **Windows: Python still not found** → reinstall it and make sure **"Add Python to PATH"** is ticked.
+- **Login problems** → run `claude` (or `codex login`) again and finish the browser sign-in.
+- **Still stuck?** Come 15 minutes early on event day — we will get you set up quickly.
