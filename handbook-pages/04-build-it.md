@@ -10,9 +10,9 @@ Give **[BUILDING.md](starter-files/BUILDING.md)** to Claude Code — it contains
 
 ---
 
-Now you're in **Claude Code** (the terminal). Three iterations. BUILDING.md guides Claude
-through each one — you just kick it off and test the results. After each iteration: test it,
-then type `checkpoint` and hit Enter to save.
+Now you're in **Claude Code** (the terminal). You'll build three things, one at a time:
+the brain, a clean interface, and memory. After each one: test it, then type `checkpoint`
+to save your progress.
 
 > **This is your core agent.** Finish these three iterations and you have a working twin — one that chats like you, remembers, and is structured so capabilities can plug in. Everything after this builds on top.
 
@@ -35,8 +35,14 @@ then build.
 
 ## Iteration 0 — the brain (~20 min)
 
-A terminal loop. Type a message, get a reply in your voice via `claude -p --session`,
-repeat until Ctrl+C. Your kickoff prompt already starts this.
+The smallest thing that proves the twin works. You type a message, it replies in your
+voice, and it loops. The kickoff prompt starts this — BUILDING.md tells Claude to build
+a terminal loop powered by `claude -p --session`.
+
+**What's happening under the hood:** Your agent calls `claude -p` as a subprocess — the
+same CLI you're already signed into. The `--session` flag keeps conversation context, so
+the twin remembers what was said earlier in the same run. No API key, no cost — it uses
+your existing subscription.
 
 When it's done, run it:
 
@@ -46,40 +52,45 @@ node core.js
 
 Talk to it for a minute. **The real test:** text it something a friend would say. Does the
 reply sound like you? If the code runs but the voice is off, tell Claude what's wrong —
-*"too formal"*, *"shorter replies"*, *"more sarcasm"* — the fix is in the prompt, not the code.
+*"too formal"*, *"shorter replies"*, *"more sarcasm"* — the fix is in the prompt, not
+the code.
 
 When it feels right, type `checkpoint` and hit Enter.
 
 ## Iteration 1 — clean terminal interface (~15 min)
 
-The brain works — now make it pleasant to use. Paste this:
+The brain works — now make it pleasant to use. Right now the output is raw text with no
+structure. You want labeled lines so you can tell who said what — `You:` on your messages,
+the agent's name on its replies.
 
-```
-Let's continue to iteration 1. Clean up the terminal interface — labeled lines, clean
-formatting. Follow BUILDING.md.
-```
+Tell Claude to move to iteration 1 — clean up the terminal interface. You should see your
+agent's name on its replies and clear separation between messages.
 
-You should see your agent's name on its replies and `You:` on yours. Chat with it, then
-type `checkpoint` and Enter.
+Run it, chat with it, then type `checkpoint` and Enter.
 
 ## Iteration 2 — memory (~20 min)
 
-Right now the twin forgets everything when you restart. Paste this:
+Right now the twin forgets everything when you restart. `--session` keeps context within a
+single run, but close the app and it's gone.
 
-```
-Let's continue to iteration 2. Add memory with the extension points from BUILDING.md —
-recallContext, remember, and session persistence.
-```
+This iteration adds two things:
 
-This adds `recallContext()` and `remember()` — the same functions that memory modules will
-replace later with a real engine. For now they use a simple JSON file.
+1. **Session persistence** — save the session ID to a file so `--session` picks up where it
+   left off across restarts.
+2. **Memory functions** — `recallContext(query)` loads relevant past context before each
+   reply, `remember(content)` saves a summary of each turn. For now these use a simple JSON
+   file. Later, when you install the memory module, these same functions get replaced with a
+   real search engine — but the interface stays the same.
+
+Tell Claude to move to iteration 2 — add memory with `recallContext` and `remember`.
 
 **The test:** tell it something specific ("my favourite coffee is filter kaapi"), fully
 restart the app (`Ctrl+C`, then `node core.js`), then ask "what's my favourite coffee?"
 If it remembers, it works. Type `checkpoint` and Enter.
 
-> You now have an agent that chats like you **and** remembers across restarts, with
-> extension points (`askTwin`, `recallContext`, `remember`) that modules plug into.
+> You now have an agent that chats like you **and** remembers across restarts. The three
+> functions it exports — `askTwin`, `recallContext`, `remember` — are the extension points
+> that every module in the next phase plugs into.
 
 ## After iteration 2 — verify extension points
 
