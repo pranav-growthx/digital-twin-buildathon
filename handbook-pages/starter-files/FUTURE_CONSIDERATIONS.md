@@ -34,8 +34,7 @@ sound like them. Frame it as "let's fine-tune" rather than front-loading the int
 
 ## Voice Output
 
-Let the twin *speak* its replies using a free, open-source text-to-speech engine that runs
-locally — no paid voice API, no cloud dependency.
+Let the twin *speak* its replies using a text-to-speech API.
 
 **Options:**
 - **Sarvam AI** — Indian-language TTS with natural Hindi/English voices. API-based.
@@ -64,5 +63,5 @@ they learned:
   draft a briefing
 - **Daily journal** — scheduled nightly prompt that asks the twin to summarize what happened
   today, saved to a markdown file
-- **Voice cloning** — train a TTS model on your actual voice recordings (Coqui supports this)
+- **Voice cloning** — train a TTS model on your actual voice recordings
 - **Multi-platform sync** — same twin on Slack + Discord + Telegram, shared memory across all

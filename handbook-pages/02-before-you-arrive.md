@@ -1,7 +1,7 @@
 # GrowthX Buildathon — Laptop Setup
 
 > **Do this _before_ you arrive — about 15 minutes.**
-> The event is 3 hours of *building*, not installing. If your laptop is ready the night before, you can start the moment you sit down. Stuck on a step? Come 15 minutes early and a mentor will help.
+> The event is an afternoon of *building*, not installing. If your laptop is ready the night before, you can start the moment you sit down. Stuck on a step? Come 15 minutes early and a mentor will help.
 
 ---
 
@@ -15,7 +15,7 @@
 
 You'll set up five things, in order:
 
-**Node.js → an IDE → your AI tool → Python → Git**
+**Node.js → an IDE → your AI tool → Git**
 
 ---
 
@@ -99,25 +99,7 @@ codex login
 
 ---
 
-## Step 5 — Install Python
-
-> The default build uses Python. *Building in JavaScript instead? Node from Step 1 is enough — skip this step.*
-
-**Windows**
-1. Go to **[python.org/downloads](https://www.python.org/downloads/)** and download Python.
-2. Run the installer — **tick "Add Python to PATH"** at the bottom — then click **Install Now**.
-
-**macOS**
-1. Go to **[python.org/downloads](https://www.python.org/downloads/)** and run the macOS installer.
-
-Have Homebrew?
-```bash
-brew install python
-```
-
----
-
-## Step 6 — Install Git
+## Step 5 — Install Git
 
 > During the build you'll "checkpoint" your work so you never lose it. Git makes that possible.
 
@@ -142,22 +124,12 @@ brew install git
 
 ---
 
-## Step 7 — Verify everything works
+## Step 6 — Verify everything works
 
 In your IDE terminal, run these — each should print a version, not an error:
 
-**Windows**
-```powershell
-node --version
-python --version
-git --version
-claude --version
-```
-
-**macOS**
 ```bash
 node --version
-python3 --version
 git --version
 claude --version
 ```
@@ -181,6 +153,5 @@ A one-word reply means you're ready for the build.
 ## If something goes wrong
 
 - **"not recognized" / "command not found"** → close your IDE and reopen it (the terminal picks up new installs), then try again.
-- **Windows: Python still not found** → reinstall it and make sure **"Add Python to PATH"** is ticked.
 - **Login problems** → run `claude` (or `codex login`) again and finish the browser sign-in.
 - **Still stuck?** Come 15 minutes early on event day — we will get you set up quickly.

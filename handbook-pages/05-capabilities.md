@@ -113,9 +113,10 @@ Follow up in the same thread — it should remember the conversation.
 
 ---
 
-## Step 2 — Add a capability (~25 min)
+## Step 2 — Layer in capabilities
 
-Pick **one** that excites you. Get it working end-to-end before reaching for another.
+You have plenty of time left — each capability takes 15–30 minutes. Start with the one
+that excites you most, get it working, then add another.
 
 ### Option A: Email — read your inbox and draft replies
 

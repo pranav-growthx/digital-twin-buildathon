@@ -149,7 +149,7 @@ so the AI talks like me.
 > me: [reply in their voice]
 ```
 
-Build the **Quick Sample** from their real texts in Q10 (or invent 2–3 that match their ticks).
+Build the **Quick Sample** — invent 2–3 exchanges that match their ticks.
 Then tell them: **"Save this as `PERSONA.md` in your `my-twin` folder."**
 
 ### 2. Suggest a name (don't block)
@@ -157,7 +157,7 @@ Offer **3 name ideas** that fit their vibe, plus "…or your own." If they don't
 and move on — they can rename later. They should walk out knowing the name.
 
 ### 3. Close
-"You're done with ideation — you've got `PERSONA.md` and a name (**[name]**).
+"You're done building the personality — you've got `PERSONA.md` and a name (**[name]**).
 Take these into the build phase and start."
 
 ---

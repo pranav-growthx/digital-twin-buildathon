@@ -1,6 +1,6 @@
 # Building the Personality
 
-> ~15 min · core · done on Claude web.
+> 11:30–12:00 · core · done on Claude web.
 
 ---
 
