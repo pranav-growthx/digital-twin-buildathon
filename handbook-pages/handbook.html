@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrowthX Buildathon — Builder Handbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8fafc;--bg-white:#ffffff;--bg-code:#f1f5f9;
+  --ink:#0f172a;--mid:#475569;--faint:#94a3b8;--light:#cbd5e1;
+  --accent:#0d9488;--accent-hover:#0f766e;--accent-light:#ccfbf1;--accent-pale:#f0fdfa;
+  --border:#e2e8f0;--border-hover:#cbd5e1;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
+  --shadow-md:0 4px 12px rgba(15,23,42,.08),0 2px 4px rgba(15,23,42,.04);
+  --shadow-lg:0 10px 30px rgba(15,23,42,.1),0 4px 8px rgba(15,23,42,.04);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow:hidden}
+body.ready{overflow:auto}
+
+/* ═══ HANDBOOK LAYOUT ═══ */
+.handbook{display:flex;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{width:260px;background:var(--bg-white);border-right:1px solid var(--border);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:24px 0;z-index:100;transition:transform .5s cubic-bezier(.4,0,.2,1),opacity .5s ease}
+.sidebar-brand{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.sidebar-brand .brand-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:8px}
+.sidebar-brand .brand-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--mid)}
+.sidebar-brand .brand-title{font-size:18px;font-weight:800;color:var(--ink);margin-top:4px;letter-spacing:-.02em}
+.sidebar-group{padding:0 16px;margin-bottom:18px}
+.sidebar-group-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--faint);margin-bottom:6px;padding:0 8px}
+.sidebar-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-weight:500;color:var(--mid);transition:.15s;margin-bottom:2px}
+.sidebar-item:hover{background:var(--bg);color:var(--ink)}
+.sidebar-item.active{background:var(--accent-pale);color:var(--accent);font-weight:600}
+.sidebar-item .si-num{font-size:12px;color:var(--faint);font-weight:600}
+.sidebar-item.active .si-num{color:var(--accent)}
+.sidebar-divider{height:1px;background:var(--border);margin:10px 16px}
+.sidebar-starter{padding:0 16px}
+.sidebar-starter-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--faint);margin-bottom:6px;padding:0 8px}
+.sidebar-starter-item{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;font-weight:500;color:var(--mid);transition:.15s}
+.sidebar-starter-item:hover{background:var(--bg);color:var(--accent)}
+
+/* Cover-active state — hide sidebar */
+.handbook.cover-active .sidebar{transform:translateX(-100%);opacity:0;pointer-events:none}
+.handbook.cover-active .main-content{margin-left:0}
+
+/* ── MAIN CONTENT ── */
+.main-content{margin-left:260px;flex:1;min-height:100vh;transition:margin-left .5s cubic-bezier(.4,0,.2,1)}
+.section-panel{display:none;padding:40px 48px 80px;max-width:920px;animation:panelIn .3s ease}
+.section-panel.active{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.section-pill{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent);border:1.5px solid var(--accent);border-radius:99px;padding:5px 14px;margin-bottom:18px}
+.section-title{font-size:clamp(28px,4vw,42px);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:8px}
+.section-sub{font-size:16px;color:var(--mid);line-height:1.6;margin-bottom:32px;max-width:640px}
+
+.bottom-nav{display:flex;justify-content:space-between;gap:16px;padding:32px 0 0;border-top:1px solid var(--border);margin-top:48px}
+.nav-link{text-decoration:none;color:var(--ink);padding:12px 0;transition:color .15s;max-width:48%}
+.nav-link:hover{color:var(--accent)}
+.nav-link-label{font-size:12px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.nav-link-title{font-size:15px;font-weight:600;line-height:1.3}
+.nav-link.next{text-align:right;margin-left:auto}
+
+/* ═══ COVER ═══ */
+.cover-section{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:200;transition:opacity .6s ease,transform .6s ease;overflow:hidden}
+.cover-section.dismissed{opacity:0;pointer-events:none;transform:scale(1.02)}
+.cover-blob1{position:absolute;top:-15%;right:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(13,148,136,.12) 0%,rgba(6,182,212,.06) 40%,transparent 70%);filter:blur(40px);animation:blobFloat 8s ease-in-out infinite;pointer-events:none}
+.cover-blob2{position:absolute;bottom:-20%;left:-10%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08) 0%,rgba(13,148,136,.05) 40%,transparent 70%);filter:blur(40px);animation:blobFloat 8s ease-in-out 2s infinite;pointer-events:none}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-20px) scale(1.08)}}
+.cover-inner{position:relative;z-index:1;text-align:center;max-width:700px;padding:0 24px}
+.cover-line1{font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;animation:fadeUp .7s ease both}
+.cover-line1 .cover-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:10px;vertical-align:middle}
+.cover-line2{font-size:clamp(42px,8vw,80px);font-weight:900;letter-spacing:-.04em;line-height:1.05;color:var(--ink);margin-bottom:16px;animation:fadeUp .7s ease .12s both}
+.cover-line2 span{background:linear-gradient(135deg,var(--accent),#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cover-line3{font-size:clamp(15px,2vw,19px);color:var(--mid);font-weight:500;margin-bottom:48px;animation:fadeUp .7s ease .24s both;letter-spacing:.01em}
+.cover-line3 em{color:var(--accent);font-style:normal;font-weight:700}
+.cover-start{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:16px 36px;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);animation:fadeUp .7s ease .36s both;box-shadow:0 4px 16px rgba(13,148,136,.25)}
+.cover-start:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 8px 28px rgba(13,148,136,.35)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ MARKDOWN STYLES ═══ */
+.md h1{font-size:28px;font-weight:800;margin:40px 0 16px;letter-spacing:-.02em;line-height:1.2}
+.md h2{font-size:22px;font-weight:700;margin:36px 0 14px;letter-spacing:-.01em;line-height:1.25;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.md h3{font-size:18px;font-weight:700;margin:28px 0 10px;line-height:1.3}
+.md h4{font-size:15px;font-weight:700;margin:24px 0 8px;line-height:1.3}
+.md p{margin:0 0 16px;line-height:1.7}
+.md strong{font-weight:700}
+.md em{font-style:italic}
+.md a{color:var(--accent);text-decoration:none;font-weight:500;border-bottom:1px solid transparent;transition:border-color .15s}
+.md a:hover{border-bottom-color:var(--accent)}
+.md hr{border:none;height:1px;background:var(--border);margin:28px 0}
+.md blockquote{border-left:3px solid var(--accent);background:var(--accent-pale);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:14px 18px;margin:16px 0;color:var(--ink)}
+.md blockquote p{margin:0 0 8px}
+.md blockquote p:last-child{margin:0}
+.md ul,.md ol{margin:0 0 16px;padding-left:24px}
+.md li{margin-bottom:6px;line-height:1.6}
+.md li.checkbox{list-style:none;margin-left:-24px;padding-left:0}
+.md li.checkbox input{margin-right:8px;accent-color:var(--accent)}
+.md .table-wrap{overflow-x:auto;margin:16px 0;border-radius:var(--radius);border:1px solid var(--border)}
+.md table{width:100%;border-collapse:collapse;font-size:14px}
+.md th{text-align:left;padding:10px 14px;background:var(--bg);font-weight:600;border-bottom:2px solid var(--border);white-space:nowrap}
+.md td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.md tr:last-child td{border-bottom:none}
+.md code{font-family:'JetBrains Mono',monospace;font-size:.875em;background:var(--bg-code);padding:2px 6px;border-radius:4px;color:#0e7490;word-break:break-word}
+.md .code-block{margin:16px 0;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;background:var(--bg-white)}
+.md .code-header{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:var(--bg);border-bottom:1px solid var(--border);font-size:12px}
+.md .code-header span{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--faint);text-transform:lowercase}
+.md .code-block pre{margin:0;padding:14px 16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.6;color:var(--ink);background:transparent}
+.md .code-block code{background:none;padding:0;color:inherit;font-size:inherit;border-radius:0}
+.md .copy-btn{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;background:none;border:1px solid var(--border);border-radius:6px;padding:3px 10px;cursor:pointer;color:var(--mid);transition:all .15s}
+.md .copy-btn:hover{color:var(--accent);border-color:var(--accent)}
+.md details{margin:16px 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--bg-white)}
+.md summary{padding:12px 16px;font-weight:600;cursor:pointer;background:var(--bg);user-select:none;font-size:15px}
+.md summary:hover{color:var(--accent)}
+.md details[open] summary{border-bottom:1px solid var(--border)}
+.md details .details-body{padding:16px}
+
+/* ═══ MODAL ═══ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(4px);z-index:300;justify-content:center;align-items:center;padding:24px}
+.modal-overlay.active{display:flex}
+.modal{background:var(--bg-white);border-radius:16px;box-shadow:var(--shadow-lg);max-width:780px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--border);flex-shrink:0}
+.modal-header h3{font-size:17px;font-weight:700}
+.modal-header-actions{display:flex;gap:8px;align-items:center}
+.modal-close{font-family:inherit;font-size:20px;background:none;border:none;color:var(--faint);cursor:pointer;padding:4px 8px;line-height:1;border-radius:6px;transition:all .15s}
+.modal-close:hover{background:var(--bg);color:var(--ink)}
+.modal-body{overflow-y:auto;padding:0}
+.modal-body pre{margin:0;padding:20px 24px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;white-space:pre-wrap;word-break:break-word;color:var(--ink)}
+.btn-sm{font-family:inherit;font-size:13px;font-weight:600;border:1px solid var(--border);background:var(--bg-white);color:var(--ink);border-radius:var(--radius-sm);padding:7px 14px;cursor:pointer;transition:all .15s}
+.btn-sm:hover{border-color:var(--accent);color:var(--accent)}
+.btn-accent{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-accent:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:#fff}
+
+/* ═══ MOBILE ═══ */
+.mobile-toggle{display:none;position:fixed;top:12px;left:12px;z-index:150;font-family:inherit;font-size:13px;font-weight:600;background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;cursor:pointer;color:var(--mid);box-shadow:var(--shadow)}
+.mobile-toggle:hover{border-color:var(--accent);color:var(--accent)}
+.sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(15,23,42,.3);z-index:99}
+.sidebar-backdrop.active{display:block}
+
+@media(max-width:900px){
+  .handbook.cover-active .sidebar{transform:translateX(-100%)}
+  .sidebar{transform:translateX(-100%);z-index:150}
+  .sidebar.open{transform:translateX(0)}
+  .main-content{margin-left:0!important}
+  .mobile-toggle{display:block}
+  .handbook.cover-active .mobile-toggle{display:none}
+  .section-panel{padding:60px 20px 80px}
+}
+@media(max-width:640px){
+  .section-title{font-size:28px}
+  .md .code-block pre{font-size:12.5px;padding:12px 14px}
+  .md table{font-size:13px}
+  .md th,.md td{padding:8px 10px}
+  .bottom-nav{flex-direction:column}
+  .nav-link.next{text-align:left;margin-left:0}
+  .modal{max-height:92vh;border-radius:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  .cover-blob1,.cover-blob2{animation:none}
+  .cover-line1,.cover-line2,.cover-line3,.cover-start{animation:none;opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="handbook cover-active" id="handbook">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div><span class="brand-dot"></span><span class="brand-label">GrowthX Buildathon</span></div>
+    <div class="brand-title">Builder Handbook</div>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Start Here</div>
+    <div class="sidebar-item" data-section="welcome"><span>Welcome</span><span class="si-num">01</span></div>
+    <div class="sidebar-item" data-section="before-you-arrive"><span>Laptop Setup</span><span class="si-num">02</span></div>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Build</div>
+    <div class="sidebar-item" data-section="building-personality"><span>Building the Personality</span><span class="si-num">03</span></div>
+    <div class="sidebar-item" data-section="build-it"><span>Build It</span><span class="si-num">04</span></div>
+    <div class="sidebar-item" data-section="capabilities"><span>Grow Your Twin</span><span class="si-num">05</span></div>
+    <div class="sidebar-item" data-section="demo"><span>Demo</span><span class="si-num">06</span></div>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Help</div>
+    <div class="sidebar-item" data-section="troubleshooting"><span>Troubleshooting</span><span class="si-num">07</span></div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-starter">
+    <div class="sidebar-starter-label">Starter Files</div>
+    <div class="sidebar-starter-item" onclick="window.__showStarter('IDEATION.md')"><span>&#128196;</span><span>IDEATION.md</span></div>
+    <div class="sidebar-starter-item" onclick="window.__showStarter('BUILDING.md')"><span>&#128196;</span><span>BUILDING.md</span></div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-content" id="main-content">
+
+  <!-- COVER -->
+  <div class="cover-section" id="cover">
+    <div class="cover-blob1"></div>
+    <div class="cover-blob2"></div>
+    <div class="cover-inner">
+      <div class="cover-line1"><span class="cover-dot"></span>GrowthX Buildathon</div>
+      <div class="cover-line2">Build Your Own<br><span>Personal AI Agent</span></div>
+      <div class="cover-line3">Your AI twin, built in <em>one afternoon</em></div>
+      <button class="cover-start" onclick="window.__dismissCover()">Open the Handbook &rarr;</button>
+    </div>
+  </div>
+
+  <!-- CONTENT PANELS (rendered by JS) -->
+  <div id="panels"></div>
+
+</div>
+</div>
+
+<!-- MOBILE -->
+<button class="mobile-toggle" id="mobile-toggle" onclick="window.__toggleSidebar()">&#9776; Menu</button>
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="window.__closeSidebar()"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h3 id="modal-title"></h3>
+      <div class="modal-header-actions">
+        <button class="btn-sm" id="modal-copy-btn" onclick="window.copyStarter()">Copy</button>
+        <button class="btn-sm btn-accent" id="modal-dl-btn" onclick="window.downloadStarter()">Download</button>
+        <button class="modal-close" onclick="window.closeModal()">&times;</button>
+      </div>
+    </div>
+    <div class="modal-body"><pre id="modal-content"></pre></div>
+  </div>
+</div>
+
+<!-- ═══════════════ PAGE CONTENT ═══════════════ -->
+
+<script type="text/markdown" data-id="welcome">
+# Welcome
+
+> **Start Here**
+
+What today is — and how to get the most from it.
+
+---
+
+You're here to build your own **personal AI agent** today — and demo it live on stage by the end. Not a slide, not a mockup: a real agent that *you* built, running in front of the room.
+
+There's no prize to chase. The reward is the thing you walk out with, and the moment you show it actually working.
+
+## What to expect
+
+This is a real build, not a copy-paste tutorial. Parts of it will feel confusing, and it won't always be a straight line — you'll try something, hit a wall, and work it out. **That's the point.** It's meant to make you think, and mentors are in the room the whole time to unblock you. You don't need to be a programmer to do this. You'll be fine.
+
+## How the day runs
+
+| Time | What |
+|------|------|
+| 11:00 AM | Reporting. Get seated, plug in, last-minute setup help. |
+| 11:30–12:00 | **Build the personality** — define how your twin texts ([details](03-building-the-personality.md)) |
+| 12:00 | Building starts. Open with your "magic moment" — your twin doing one thing that is unmistakably you. |
+| 12:00–3:00 | **Build.** Core agent first (~1 hr), then layer in real capabilities — reading email, drafting replies, scheduling tasks, going live on Slack. |
+| 3:00–4:00 | **Demos.** Show the working thing. No slides. |
+
+**Do the core first** (~1 hr) — an agent that chats like you and remembers. Then spend the remaining ~2 hours giving it real capabilities: Slack, email, scheduling, memory upgrades. The goal is something you can actually use tomorrow.
+
+One thing before you come: do the quick setup in **[Before You Arrive](02-before-you-arrive.md)** tonight — it saves your first hour for building instead of installing.
+</script>
+
+<script type="text/markdown" data-id="before-you-arrive">
+# GrowthX Buildathon — Laptop Setup
+
+> **Do this _before_ you arrive — about 15 minutes.**
+> The event is an afternoon of *building*, not installing. If your laptop is ready the night before, you can start the moment you sit down. Stuck on a step? Come 15 minutes early and a mentor will help.
+
+---
+
+## What you'll need
+
+- A **laptop** (Windows or Mac) where you can install software (admin rights).
+- An **AI subscription** you can log in to — one of:
+  - **Claude Pro / Max** — *recommended* (powers **Claude Code**)
+  - **ChatGPT Plus / Pro** (powers **Codex**)
+- About **15 minutes**.
+
+You'll set up five things, in order:
+
+**Node.js → an IDE → your AI tool → Git**
+
+---
+
+## Step 1 — Install Node.js
+
+> Your AI tool is installed and runs through Node.js.
+
+**Windows**
+1. Go to **[nodejs.org](https://nodejs.org)** and download the **LTS** version.
+2. Run the installer and click through (Next → Next → Finish).
+
+Prefer the terminal?
+```powershell
+winget install OpenJS.NodeJS.LTS
+```
+
+**macOS**
+1. Go to **[nodejs.org](https://nodejs.org)** and download the **macOS LTS** (`.pkg`).
+2. Run the installer.
+
+Have [Homebrew](https://brew.sh)?
+```bash
+brew install node
+```
+
+---
+
+## Step 2 — Install your Code-Editor (your workspace)
+
+> An IDE is the app where you'll see your files and run commands. It has a built-in **terminal** you'll use in the next step.
+
+Pick **one** (each site has Windows & macOS downloads):
+
+| IDE | Notes |
+|-----|-------|
+| **[VS Code](https://code.visualstudio.com)** | Recommended — free, simple, works everywhere |
+| **[Google Antigravity](https://antigravity.google)** | AI-first IDE |
+| **[Cursor](https://cursor.com)** | AI-first IDE |
+
+> Not sure? **Choose VS Code.** Antigravity and Cursor are also built on VS Code, so the steps below are identical. (They have their own built-in AI, but for this build everyone uses Claude Code in the terminal.)
+
+Download your chosen IDE, install it, and **open it**.
+
+---
+
+## Step 3 — Install your AI tool (in the IDE terminal)
+
+**1. Open the built-in terminal** inside your IDE:
+- Menu: **Terminal → New Terminal**, or
+- Shortcut: **Ctrl + `** (Windows) / **Cmd + `** (macOS) — the key above Tab.
+
+A terminal panel opens at the bottom. **2. Type the command for your tool:**
+
+**Claude Code** (recommended)
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+**Codex** (alternative)
+```bash
+npm install -g @openai/codex
+```
+
+> If it says **"npm is not recognized"**, close the IDE and reopen it (so it picks up Node from Step 1), then open the terminal again.
+
+---
+
+## Step 4 — Log in to your AI tool
+
+In the same terminal:
+
+**Claude Code** — run `claude`, then sign in with your Claude account in the browser window that opens. Type `/exit` when done.
+```bash
+claude
+```
+
+**Codex**
+```bash
+codex login
+```
+
+---
+
+## Step 5 — Install Git
+
+> During the build you'll "checkpoint" your work so you never lose it. Git makes that possible.
+
+**Windows**
+1. Go to **[git-scm.com/download/win](https://git-scm.com/download/win)**, download, and run the installer (accept the defaults).
+
+Prefer the terminal?
+```powershell
+winget install Git.Git
+```
+
+**macOS**
+1. Run the line below. If Git isn't installed, macOS pops up an **Install** button — click it.
+```bash
+git --version
+```
+
+Have Homebrew?
+```bash
+brew install git
+```
+
+---
+
+## Step 6 — Verify everything works
+
+In your IDE terminal, run these — each should print a version, not an error:
+
+```bash
+node --version
+git --version
+claude --version
+```
+
+> Codex users: use `codex --version` instead of `claude --version`.
+
+**Final test — can your AI tool answer?**
+
+```bash
+claude -p "say hello in one word"
+```
+Codex:
+```bash
+echo "say hello in one word" | codex exec -
+```
+
+A one-word reply means you're ready for the build.
+
+---
+
+## If something goes wrong
+
+- **"not recognized" / "command not found"** → close your IDE and reopen it (the terminal picks up new installs), then try again.
+- **Login problems** → run `claude` (or `codex login`) again and finish the browser sign-in.
+- **Still stuck?** Come 15 minutes early on event day — we will get you set up quickly.
+</script>
+
+<script type="text/markdown" data-id="building-personality">
+# Building the Personality
+
+> 11:30–12:00 · core · done on Claude web.
+
+---
+
+## Starter file
+
+Give **[IDEATION.md](starter-files/IDEATION.md)** to Claude / ChatGPT — it runs a quick interview about how you text and produces your personality file.
+
+---
+
+Define **how your agent talks** — its tone, humor, message style, and boundaries. No code in this phase. **Takes 15–20 minutes.**
+
+> Do this on **Claude web (claude.ai) or ChatGPT — not Claude Code.** It keeps your Claude Code usage fresh for the actual build later.
+
+## Steps
+
+1. Open **claude.ai** (or ChatGPT) in your browser.
+2. Paste in the **`IDEATION.md`** rules from the starter files above.
+3. Tell it: **"Run my digital-twin interview."** That one line kicks it off.
+4. It walks you through **9 quick questions, one at a time** — message shape, punctuation style, emojis, tone, greetings, humor, topics, boundaries, and pronouns. Each is a tick-box: put an `x` in the brackets next to what fits you and send it back. Unsure on one? It picks a sensible default and moves on.
+5. It writes you a **`PERSONA.md`** — your voice and style in one file. Save it into your `my-twin` folder.
+6. It suggests a few **names** — pick one. You should walk out knowing your agent's name.
+
+> The name matters — you'll introduce your agent by name when you demo it on stage.
+
+## Quick sanity check
+
+Before you move on — test it. Paste your `PERSONA.md` as a system prompt in Claude or ChatGPT, then text it something a friend would say. Does the reply sound like you? If it's way off, tweak the persona before you build. 30 seconds now saves rework later.
+
+> This is **v0.1** of your personality — good enough to build with. You'll refine it once you see your twin in action and notice where it sounds off.
+
+When you have a saved `PERSONA.md` and a name, you're ready to build.
+</script>
+
+<script type="text/markdown" data-id="build-it">
+# Build It
+
+> ~1 hr · your core agent.
+
+---
+
+## Starter file
+
+Give **[BUILDING.md](starter-files/BUILDING.md)** to Claude Code — it contains the rules Claude Code follows to build your agent. Copy or download it into your `my-twin` folder.
+
+---
+
+Now you're in **Claude Code** (the terminal). Three iterations. **You write the prompts yourself** — figuring out what to ask for *is* the building. After each iteration: test it, then type `checkpoint` and hit Enter to save.
+
+> **This is your core agent.** Finish these three iterations and you have a working twin — one that chats like you, remembers, and is structured so capabilities can plug in. Everything after this builds on top.
+
+**Kickoff — paste this once to start** (in Claude Code, inside your `my-twin` folder):
+
+```
+Read BUILDING.md and PERSONA.md in this folder, and follow BUILDING.md as your rules
+for this whole session.
+
+I'm building my personal AI agent — a digital twin that chats in my voice (described in
+PERSONA.md). Its brain must be the claude -p CLI I'm already signed into — no API key.
+
+Everything is Node.js (core.js). Start with Iteration 0 from BUILDING.md: plan it first,
+then build.
+```
+
+> Your agent's brain is the **`claude -p`** command you're already signed into — **no API key, no cost.** (`BUILDING.md` enforces this, so you don't have to.)
+
+> After this, **you write the prompts** — deciding what to ask for *is* the building. (Stuck? Each iteration has an optional example you can expand.)
+
+> Something breaks? Don't debug it alone — **paste the exact error back to Claude** and let it fix it.
+
+## Iteration 0 — the brain
+
+A terminal loop. Type a message, get a reply in your voice via `claude -p --session`, repeat until Ctrl+C.
+
+Your kickoff prompt already starts this — make sure what Claude builds does all of these:
+
+1. You run it with `node core.js`.
+2. It reads your `PERSONA.md`.
+3. It has an `askTwin(message)` function that calls `claude -p --session` and returns the reply.
+4. It loops: waits for you to type → calls `askTwin()` → prints the reply → waits again.
+5. `askTwin` is exported: `export function askTwin(...)`.
+6. `package.json` exists with `"type": "module"`.
+
+<details>
+<summary>Show an example prompt (optional)</summary>
+
+```
+Build a Node.js program in core.js that I run from the terminal.
+It reads my PERSONA.md, then loops: waits for me to type a message, sends my personality
++ my message to claude -p --session (via child_process), prints the reply in my voice,
+then waits for the next message. It exits on Ctrl+C. No API key — use claude -p.
+
+The askTwin function must be an export so other modules can import it later.
+Make sure package.json has "type": "module". Plan it first, then build.
+```
+
+</details>
+
+Run it:
+```bash
+node core.js
+```
+
+Talk to it for a minute. When it feels right, type `checkpoint` and hit Enter.
+
+## Iteration 1 — clean terminal interface
+
+Clean up the chat experience. The brain is working — now make it pleasant to use.
+
+Write a prompt that asks Claude to:
+
+1. Keep it running as a continuous chat that waits for each new message.
+2. Make the interface clean — label the lines (like `You:` and your agent's name).
+3. **No memory yet** — that's the next iteration.
+
+Run it, chat with it, then type `checkpoint` and Enter.
+
+## Iteration 2 — memory with extension points
+
+Right now it forgets everything when you restart. Give it **cross-restart memory** with
+named functions that capability modules can replace later.
+
+Write a prompt that asks Claude to:
+
+1. Create an `export function recallContext(query)` that loads relevant past context from
+   `memory.json` (returns a string, or `""` if nothing relevant).
+2. Create an `export function remember(content)` that saves content to `memory.json`.
+3. Call `recallContext` before each `askTwin` call and prepend the result to the prompt.
+4. Call `remember` after each reply with a summary of the turn.
+5. Reuse the same session ID across restarts (save it to a file).
+
+Run it, then test it: tell it something, **fully restart the app**, then ask about it — it should still know. Type `checkpoint` and Enter.
+
+> You now have an agent that chats like you **and** remembers across restarts, with
+> extension points (`askTwin`, `recallContext`, `remember`) that modules plug into.
+
+## After iteration 2 — verify extension points
+
+Before moving to the next phase, confirm the code has the right shape:
+
+- [ ] `export function askTwin(message)` exists
+- [ ] `export function recallContext(query)` exists
+- [ ] `export function remember(content)` exists
+- [ ] `main()` exists and runs the readline loop
+- [ ] `package.json` has `"type": "module"`
+
+If any are missing, add them now. Every module in the next phase depends on this shape.
+
+*"Your core is done — the agent chats like you, remembers, and is structured for modules.
+Ready to put it on Slack and add capabilities? That's the next phase."*
+</script>
+
+<script type="text/markdown" data-id="capabilities">
+# Grow Your Twin
+
+> ~2 hours · go live on Slack, then layer in capabilities.
+
+---
+
+You built a twin that chats in your voice and remembers. Now **grow it** — put it on Slack so people can actually message it, then layer in real capabilities so it can do something useful tomorrow.
+
+Your core has four extension points that modules plug into:
+
+```
+askTwin(message)      → the brain (modules call this)
+recallContext(query)   → memory read (modules replace this)
+remember(content)      → memory write (modules replace this)
+main()                 → startup (modules hook in here)
+```
+
+Every module below connects through one of these. Your brain, your voice, your persona — they stay exactly as you built them. Modules just give the twin new faces and new powers.
+
+You have **~2 hours** for this phase. Start with Slack, then keep layering — each capability takes 15-30 minutes to install and verify.
+
+---
+
+## How capabilities get added
+
+Two patterns, depending on what you're adding:
+
+### Modules (Slack, Memory, Scheduler)
+
+These change your twin's code — adding a platform listener, upgrading the memory engine, wiring in a scheduler. They install via **paste a link into Claude Code**:
+
+```
+Paste this link and follow the instructions:
+https://github.com/pranav-growthx/digital-twin-modules/tree/main/<module-name>
+```
+
+Claude reads the module's plan, installs dependencies, wires it into your `core.js`, walks you through any manual steps (creating a Slack app, connecting Gmail), and verifies it works. You don't code these by hand.
+
+All modules live at [github.com/pranav-growthx/digital-twin-modules](https://github.com/pranav-growthx/digital-twin-modules).
+
+### MCP tools (email, calendar, web search, analytics)
+
+These add capabilities the brain can use **without changing your code**. Your twin calls `claude -p`, which discovers MCP tools and uses them when the conversation calls for it:
+
+```bash
+# Add a capability in one command
+claude mcp add <name> npx <package-name>
+```
+
+Or connect services that Claude already supports:
+
+1. Go to [claude.ai/customize/connectors](https://claude.ai/customize/connectors)
+2. Connect Gmail, Google Calendar, etc.
+3. Done — your twin can now read email, check your calendar, etc.
+
+No code changes. The LLM discovers the tools and uses them when relevant.
+
+---
+
+## Step 1 — Go live on Slack (~30 min)
+
+The twin currently lives in your terminal. Put it on Slack so people can DM it and get a reply in your voice — that's the demo moment.
+
+### Create the Slack app (~5 min, you do this)
+
+1. Go to **api.slack.com/apps** → **Create New App** → **From an app manifest** → pick your workspace.
+2. Paste this manifest (change both **name** values to your agent's name):
+
+```json
+{
+  "display_information": { "name": "My Twin" },
+  "features": {
+    "app_home": { "home_tab_enabled": false, "messages_tab_enabled": true, "messages_tab_read_only_enabled": false },
+    "bot_user": { "display_name": "My Twin", "always_online": true }
+  },
+  "oauth_config": { "scopes": { "bot": ["app_mentions:read","chat:write","im:history","im:read","im:write","channels:history","groups:history","reactions:write"] } },
+  "settings": {
+    "event_subscriptions": { "bot_events": ["app_mention","message.im","message.channels","message.groups"] },
+    "interactivity": { "is_enabled": false },
+    "org_deploy_enabled": false, "socket_mode_enabled": true, "token_rotation_enabled": false
+  }
+}
+```
+
+3. **Socket Mode** → enable → create an **App-Level Token** with scope `connections:write` → copy it (`xapp-...`).
+4. **Install App** → **Install to Workspace** → **Allow**. Copy the **Bot User OAuth Token** (`xoxb-...`).
+5. In Slack, `/invite @YourBot` into a channel.
+
+### Install the Slack module (~10 min, Claude does this)
+
+Paste this into Claude Code:
+
+```
+Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modules/tree/main/slack-module and set up Slack for my twin.
+```
+
+It will:
+
+- Add `slack-bot.js` — a Slack listener that imports `askTwin()` from your `core.js`. Same brain, new face. Your `core.js` stays untouched.
+- Add `slack-mcp.js` — an MCP server so the twin can send, edit, delete Slack messages on its own
+- Create per-thread sessions so each Slack conversation has its own memory
+- Set up a state machine (idle/busy/draining) to prevent double-responses
+- Add attention gating — the bot goes dormant when humans talk without @mentioning it
+- Add thread commands — `!cancel`, `!reset`, `!status` for managing the bot in Slack
+- Ask you for the two tokens and put them in `.env`
+
+### Verify
+
+Run the bot, then DM it in Slack. You should get a reply in your voice within a few seconds. Follow up in the same thread — it should remember the conversation.
+
+> **Something breaks?** Copy the error, paste it to Claude. The fix is usually a missing scope or a token typo.
+
+---
+
+## Step 2 — Layer in capabilities
+
+You have plenty of time left — each capability takes 15–30 minutes. Start with the one that excites you most, get it working, then add another.
+
+### Option A: Email — read your inbox and draft replies
+
+Connect Gmail so your twin can read your unread email and draft replies in your voice.
+
+**Setup:**
+1. Go to [claude.ai/customize/connectors](https://claude.ai/customize/connectors) → connect **Gmail** → sign in → allow read access.
+2. Paste this into Claude Code:
+   ```
+   Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modules/tree/main/capabilities-module and set up email capabilities for my twin.
+   ```
+   It installs a Skill for email reading + reply drafting, and an **MCP Quickstart** guide (`MCP_QUICKSTART.md`) that shows you how to add any MCP server to your twin.
+
+**Try it:** Tell your twin "read my emails and draft replies." It reads your unread inbox, drafts a reply to each in your voice, and saves them to `drafts/replies-<date>.md`.
+
+**What it does:**
+- Summarize your unread inbox — who wants what, at a glance
+- Draft replies in your voice — ready to review and send
+- Triage — separate real emails from noise
+
+> **Read-only by design.** It never sends email or marks anything as read. It only drafts. You review and send yourself.
+
+### Option B: Scheduler — do things on a timer
+
+Give your twin a clock. "Send me a hi message at 7:30pm" — it fires at the right time. "Every weekday at 9am, summarize my Slack" — it runs unattended.
+
+**Setup:** Paste this into Claude Code:
+```
+Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modules/tree/main/scheduler-module and set up the scheduler for my twin.
+```
+It installs:
+- `scheduler.js` — an engine that fires due jobs (auto-starts inside your twin)
+- `scheduler-mcp.js` — an MCP server so the agent can schedule via tools (primary path)
+- `schedule.js` — a CLI fallback for creating jobs
+- Markdown workflow support — write a `.workflow.md` file and the scheduler picks it up
+
+**Try it:** Tell your twin "send me a hi message in 2 minutes." A job appears in `data/jobs.json`, and ~2 min later a notification fires.
+
+**What it does:**
+- One-off reminders — "remind me about the call at 3pm"
+- Scheduled Slack messages — "post the launch note to #team at 9am tomorrow"
+- Recurring jobs — "every weekday at 9am, summarize my unread email"
+- In-voice output — scheduled messages sound like you, not a robot
+
+### Option C: Memory upgrade — real recall
+
+You built basic memory in iteration 2 (a JSON file). Upgrade it to [**engram**](https://github.com/anmolmoses/engram-memory) — an associative memory engine with hybrid retrieval (semantic vectors + FTS5 lexical, fused with Reciprocal Rank Fusion), a graph of typed edges between memories with spreading-activation recall, and "dreaming" consolidation that promotes proven memories and archives noise. One SQLite file, no API key needed (offline hashing embedder by default).
+
+**Setup:** Paste this into Claude Code:
+```
+Read the agent integration guide from https://github.com/anmolmoses/engram-memory and wire engram into my twin as the memory engine. Replace my recallContext() and remember() functions with engram's recall and add APIs. My twin is Node.js ESM with core.js exporting askTwin, recallContext, and remember.
+```
+It will:
+- Install engram: `npm install github:anmolmoses/engram-memory`
+- Replace your `recallContext()` with `engram.recall(query, { k: 5, markUsed: true })`
+- Replace your `remember()` with `engram.add({ content, tier: "episodic", importance: 5 })`
+- Optionally set up nightly `engram.dream()` for consolidation
+
+**Try it:** Have a conversation, restart the twin, then ask about something from earlier. The twin should recall the right detail without being told to look it up.
+
+**What it does:**
+- Remember facts, preferences, people, decisions — durably across restarts
+- Recall relevant context automatically — before every reply
+- Semantic recall — "dentist" finds "tooth pain" even if worded differently
+- Associative graph — related memories surface via spreading activation
+- Self-improving — `dream()` promotes proven memories, archives noise
+- Built-in dashboard to visualize the memory graph
+
+### Option D: Any MCP tool — plug in anything
+
+If none of the above excite you, add any MCP server from the ecosystem:
+
+```bash
+# Google Calendar — check your schedule, create events
+claude mcp add calendar npx @anthropic/google-calendar-mcp-server
+
+# Web search — search the web for current info
+claude mcp add search npx @anthropic/brave-search-mcp-server
+
+# Database — query Postgres, MongoDB, etc.
+claude mcp add db npx @anthropic/postgres-mcp-server
+```
+
+Once added, your twin can use these tools in conversation — no code changes needed. Ask your twin "what's on my calendar today?" or "search for the latest on AI agents" and it calls the right tool automatically.
+
+---
+
+## What modules do together
+
+The real power is when modules compose. Once you have Slack + a capability or two:
+
+- **Read an email → summarize → remember the key facts** for later recall. A detail from today resurfaces when it's relevant next week.
+- **Recall context to write sharper replies** — the twin pulls what it knows about a sender or topic and folds it into the Slack or email reply it drafts.
+- **Scheduled daily digest** — at 9am every morning, summarize your unread email + Slack and post the briefing to your DMs automatically.
+
+These aren't separate features to build — they emerge naturally when the modules are installed. The brain composes them because it has access to all the tools at once.
+
+---
+
+## After the event — what to build next
+
+Today you got the core + Slack + one capability. Here's the roadmap for growing your twin into something you use every day:
+
+**Capabilities to add** (each is one `claude mcp add` or module install):
+
+| What | How | Why |
+|---|---|---|
+| Google Calendar | Claude connector | "What's my schedule?" / create events |
+| Web search | MCP server | Current info the twin doesn't know |
+| Slack channel summaries | Skill | "Catch me up on #general" |
+| Database queries | MCP server | "How many users signed up this week?" |
+| Custom internal API | Write your own MCP server | Wrap anything your team uses |
+
+**Modules to level up:**
+
+| What | What changes |
+|---|---|
+| Memory → Junior's engine | Graph-based knowledge store, auto-capture, scored recall, consolidation |
+| Scheduler → Junior's workflows | Markdown-defined jobs, hot-reload, cron + command + event triggers |
+| Sub-agents (advanced) | Multi-agent delegation — researcher, writer, reviewer personas |
+
+> **Safe by design.** The email module never sends (it only drafts). The Slack bot only edits/deletes its **own** messages. Memory is a local file. You stay in control — the twin prepares, you decide.
+</script>
+
+<script type="text/markdown" data-id="demo">
+# Demo
+
+> 3:00–4:00 · everyone demos · **5 minutes per person**.
+
+---
+
+You've built a real agent — a twin that chats like you, lives on Slack, and has real capabilities. Last step: make it presentable, then show it on stage.
+
+## Before demos start (~15 min polish)
+
+### Quick voice check
+
+Send your twin 3–4 messages on Slack (or terminal) and read the replies. If something feels off, tell Claude Code what to change — *"too formal," "keep replies shorter," "more sarcasm"* — and let it update the persona. One more pass if needed.
+
+### Make sure it's running
+
+- Slack bot running? DM it — should reply in a few seconds.
+- Capabilities working? Fire off a quick test — "read my emails," "remind me in 1 minute," or whatever you installed.
+- If something broke during polish, paste the error to Claude. Fix it or cut it — a clean demo of fewer features beats a broken demo of many.
+
+### Prep your demo messages
+
+Have 2–3 messages ready to send live. Pick ones that show off:
+
+1. **The voice** — something a friend would text, where the reply sounds unmistakably like you
+2. **A capability** — trigger something real (read email, schedule a message, recall a memory)
+3. **A follow-up** — show it remembers context from the first message
+
+---
+
+## Your 5 minutes on stage
+
+Keep it tight — you have **5 minutes total**. No slides. Live demo only.
+
+**Structure:**
+
+1. **Introduce yourself and your twin** (~30 sec)
+   - Your name, the twin's name
+   - One sentence: what it does and why you built it
+
+2. **Show the voice** (~1 min)
+   - Send a message on Slack, let everyone see the reply
+   - Point out what makes it sound like *you*, not generic AI
+
+3. **Show a capability** (~2 min)
+   - Trigger something real — email drafting, a scheduled message firing, a memory recall
+   - Walk through what happened: "I asked it to X, it did Y"
+
+4. **Take a question or send one more message** (~1 min)
+   - If time allows, take a quick question or show one more thing
+   - End with: what you'd add next if you had another hour
+
+> **Show the real thing.** Don't read a script or fake responses. A live reply that sounds like *you* is the whole point. If something breaks, talk through what you built — everyone here knows it's a same-day build.
+
+---
+
+## If things go wrong
+
+- **Twin is slow?** Talk while it thinks — explain what it's doing under the hood.
+- **Something crashes?** Show your Slack thread history — the previous replies still prove it works. Talk through the capability even if it won't fire live.
+- **Ran out of time building?** Demo what you *did* finish. A working voice with no capabilities is still a real demo. A personality that nails your texting style is impressive on its own.
+
+**You built a real personal AI agent in one afternoon. Go show it off.**
+</script>
+
+<script type="text/markdown" data-id="troubleshooting">
+# Troubleshooting
+
+> Stuck? Start here.
+
+---
+
+**Your AI is your debugger.** Almost anything that breaks, you fix the same way: copy the **exact error** and paste it to Claude Code and ask it to fix it. It wrote the code; it can fix the code.
+
+## The move that fixes most things
+
+> Paste the full error to Claude Code — include context:
+> *"I ran `node core.js` and got this error. I was trying to [what you were doing].
+> I just changed [what you changed]. Here's the full error: [paste the full stack trace]"*
+
+The more context you give, the faster the fix. Then run it again. Repeat if needed. This back-and-forth **is** building.
+
+---
+
+## Common JavaScript errors — what they mean
+
+| Error | What it means |
+|-------|---------------|
+| `Cannot read property 'x' of undefined` | You're accessing `.x` on something that doesn't exist yet. The variable is `undefined` when this line runs. |
+| `Module not found: 'xyz'` | Package not installed. Run `npm install xyz`. |
+| `X is not a function` | You're calling something that isn't callable. Check your imports — did you import the right thing? |
+| `Unexpected token` | Syntax error — a missing bracket, comma, or typo near the line mentioned. |
+| `SyntaxError: Cannot use import statement` | Your `package.json` is missing `"type": "module"`. Add it. |
+| `ERR_MODULE_NOT_FOUND` | The file path in your `import` is wrong, or you forgot the `.js` extension. ESM requires full paths. |
+
+---
+
+## Core build (iterations 0-2)
+
+**`claude -p` says "command not found"**
+Claude Code isn't installed or isn't on PATH. Run `claude --version` to check. If it fails, go back to [Before You Arrive](02-before-you-arrive.md) and install it.
+
+**`claude -p "say hello"` doesn't reply / hangs**
+You're not signed in. Run `claude` (without `-p`) and complete the login flow, then try again.
+
+**"Replies stop" / "usage limit reached"**
+Switch to Sonnet — type `/model sonnet` in Claude Code. Keep test messages short. Limits refill over time, so take a short break if needed.
+
+**Exports not working — `import { askTwin }` fails**
+Make sure your `package.json` has `"type": "module"`. Without it, Node.js treats `.js` files as CommonJS and `import`/`export` won't work.
+
+**Twin doesn't sound like you**
+That's not a code bug — tweak the prompt. Tell Claude Code *"too formal"* or *"shorter replies"* or *"more sarcasm"* and let it update PERSONA.md.
+
+---
+
+## Slack
+
+**"An API error occurred: invalid_auth"**
+Your bot token is wrong or expired. Go to **api.slack.com/apps** → your app → **OAuth & Permissions** → copy the **Bot User OAuth Token** (starts with `xoxb-`) again. Paste it into `.env`.
+
+**Bot is running but doesn't reply in Slack**
+Three things to check:
+1. Did you `/invite @YourBot` into the channel?
+2. Are you @mentioning it (or DMing it)? It won't reply to general chatter.
+3. Are the event subscriptions set up? Check **Event Subscriptions** → `app_mention` and `message.im` should be listed.
+
+**"Address already in use" (port conflict)**
+Something's already running on that port. Stop the other process (Ctrl+C in its terminal), or ask Claude Code to *"run it on a different port."*
+
+**Bot replies but sounds generic / not in my voice**
+The Slack module uses the same brain you built. If the voice is off, the fix is in PERSONA.md, not in the Slack code. Tell Claude Code what to change.
+
+---
+
+## Capabilities (MCP / Connectors)
+
+**Gmail tools not available — "mcp__claude_ai_Gmail__ not found"**
+The Gmail connector isn't connected. Go to [claude.ai/customize/connectors](https://claude.ai/customize/connectors) and connect Gmail. This is web-only auth — it won't appear under `/mcp` in the terminal.
+
+**MCP server not connecting**
+Run `claude mcp list` to see what's configured. If the server isn't listed, re-run `claude mcp add <name> npx <package>`. If it's listed but failing, check that `npx` can run the package: `npx <package-name> --help`.
+
+**Scheduler isn't firing jobs**
+Check three things:
+1. Is the scheduler running? You should see `Scheduler active` in the startup log. If not, make sure `startScheduler()` is called in your startup.
+2. Is the job in `data/jobs.json`? If not, the skill didn't create it — try again.
+3. Is the time right? Jobs use local time, no timezone suffix. Run `date` to check your system clock.
+
+**"Permission denied" / tool blocked when running via Slack bot**
+Your `claude -p` call needs `--permission-mode bypassPermissions` since the bot runs unattended and can't answer permission prompts. Check the spawn args in your bot file.
+
+---
+
+## General
+
+**"command not recognized" / "not found"**
+A tool isn't installed, or your terminal needs a restart. **Close and reopen your terminal** and try again. Still stuck? Paste it to Claude Code.
+
+**Weird characters / emoji errors (Windows)**
+Tell Claude Code: *"make the code handle Unicode correctly on Windows."* Don't fix it by hand.
+
+**Everything was working, now it's broken**
+Did you install a new module? Restart the twin — modules wire into startup, and a running process won't pick up the changes until restarted.
+
+---
+
+## Emergency — roll back to your last checkpoint
+
+If everything is broken and you can't figure out what went wrong, roll back to your last working commit:
+
+```bash
+# See your checkpoints
+git log --oneline
+
+# Find the last one that was working (e.g. "feat: iteration 2 memory")
+# Copy its commit ID, then:
+git checkout <commit-id>
+git checkout -b attempt-2
+```
+
+You're back to working. Try again from there. This is why we checkpoint after every iteration — you always have a safe point to return to.
+
+---
+
+**Still stuck?** Grab a mentor.
+</script>
+
+<!-- ═══════════════ STARTER FILES ═══════════════ -->
+
+<script type="text/plain" data-starter="IDEATION.md">
+# Ideation Phase Rules — Build Your Digital Twin
+
+**Paste this whole file into Claude (claude.ai) or ChatGPT, then say: "Run my digital-twin interview."**
+
+You (the AI) are running **Phase 1 of a buildathon**. Your job is to learn **how this person texts**,
+then hand them a finished `PERSONA.md` file and a **name** for their agent.
+This whole phase must take **15–20 minutes**. Keep it fast and low-effort for them.
+
+---
+
+## CORE RULES
+
+- **Do NOT write any code.** This phase is only the interview + one output file.
+- **You are building a *digital twin*, not an app** — an agent that texts the way *this person* texts
+  (their voice, slang, humor), so it can reply as them when they're away.
+- **Ask ONE question at a time. Never send all questions at once.** Send a question, wait for the answer,
+  then send the next. This keeps it light and step-by-step.
+- **Every question is a tick-box.** Show the options with brackets and tell them to **tick one by putting
+  an `x` in the brackets**, like `[x]`, and send it back. Minimal typing — they just tick and reply.
+- **One question per message.** After they tick an answer, confirm in a few words and move to the next number.
+- **Don't let anyone stall.** If they're unsure, recommend a sensible default, mark it, and move on.
+- **Stay on time.** 10 quick ticks, then generate the file. Don't over-interview.
+
+---
+
+## STEP 1 — The interview (ask these ONE AT A TIME, in order)
+
+Open with one line: *"Quick interview about how you text — I'll ask one at a time. Just tick an option
+(put an `x` in the brackets) and send it back. Ready? Here's Q1…"*
+
+Then send **Q1 only**. Wait for the tick. Then send **Q2 only**. And so on.
+
+**Q1 — Message shape**
+- [ ] I send a bunch of short messages rapid-fire (one thought per message)
+- [ ] I send one complete message with everything in it
+- [ ] Depends — short for casual, longer when it matters
+
+**Q2 — How my messages look**
+- [ ] Mostly lowercase, relaxed, minimal punctuation
+- [ ] Proper capitalisation & punctuation
+- [ ] Stretched words & dots ("heyyy", "noooo", "...")
+
+**Q3 — Emojis**
+- [ ] Almost never
+- [ ] Sometimes — a few when they fit
+- [ ] A lot — they're part of how I talk
+
+**Q4 — Tone** (tick up to two)
+- [ ] Casual & friendly
+- [ ] Witty & sarcastic
+- [ ] Calm & thoughtful
+- [ ] High-energy & hype
+
+**Q5 — How I greet & what I call people**
+- [ ] "hey" / "heyy" + "yaar" / "bro" / "bhai"
+- [ ] "yo" / "sup" + name or nickname
+- [ ] "hi" / "hello" + their actual name
+- [ ] My own opener: ____________
+
+**Q6 — My humor** (tick up to two)
+- [ ] Playful roasting / teasing
+- [ ] Dry sarcasm & one-liners
+- [ ] Wholesome & warm
+- [ ] Silly / random energy
+- [ ] I keep it mostly serious
+
+**Q7 — Topics I light up on** (tick any)
+- [ ] Tech & startups
+- [ ] Movies / sports / pop culture
+- [ ] Life & relationships
+- [ ] Fitness / food / travel
+- [ ] Just vibing, casual chit-chat
+- [ ] Other: ____________
+
+**Q8 — The agent must NEVER do this** (these are ON by default — untick only if you disagree)
+- [x] Make firm commitments (meetings, money, big yes/no) — say "let me get back on that"
+- [x] Share private info (address, finances, personal details)
+- [x] Be rude or abusive, even if provoked
+- [x] Fake expertise — instead say "let me check and tell you"
+- [ ] Anything else: ____________
+
+**Q9 — Pronouns** (only needed for gendered languages like Hindi)
+- [ ] he/him
+- [ ] she/her
+- [ ] they/them
+
+---
+
+## STEP 2 — After the interview, produce the deliverables
+
+### 1. Write `PERSONA.md`
+Turn their answers into the file below. **Keep these exact headings** — the build phase loads it directly.
+Where they left something blank, fill the sensible default (e.g. tone → casual & friendly, language → English).
+
+### 2. Suggest a name (don't block)
+Offer **3 name ideas** that fit their vibe, plus "…or your own." If they don't pick, go with your favourite
+and move on — they can rename later. They should walk out knowing the name.
+
+### 3. Close
+"You're done building the personality — you've got `PERSONA.md` and a name (**[name]**).
+Take these into the build phase and start."
+
+---
+
+## FORBIDDEN
+- Don't write code.
+- Don't send all the questions at once — **one question per message**, wait for the tick.
+- Don't leave them without a saved `PERSONA.md` and a name.
+- Don't block them on a perfect name — suggest and move on.
+</script>
+
+<script type="text/plain" data-starter="BUILDING.md">
+# Building Phase Rules — Build Your Digital Twin
+
+**Paste this whole file into Claude Code** (in your `my-twin` folder), then say:
+*"Read my PERSONA.md and help me build my agent — follow these rules, start with Iteration 0."*
+
+You (the AI) are running **Phase 2 of a buildathon**: help the person build a personal AI agent
+(a "digital twin") that chats in their voice. Their voice is described in `PERSONA.md`.
+
+This phase builds the **core** — the agent's brain, a terminal interface, and memory. Slack,
+capabilities, and scheduling are separate modules that layer on top of what's built here.
+
+**The code you build must follow the structure below** so that modules can plug in later without
+rewriting the core. This matters — every module assumes these functions exist.
+
+## THE BRAIN — how the agent thinks (most important rule)
+
+The agent's "brain" is the **Claude CLI in print mode** — **NOT** the Anthropic API, and **NEVER** an API key.
+
+## CODE STRUCTURE — extension points for modules
+
+The core must have these named functions so modules can hook in. **Use these exact names.**
+
+export function askTwin(message) — THE BRAIN — modules call this to get a reply
+export function recallContext(query) — MEMORY — returns relevant past context as a string
+export function remember(content) — MEMORY — saves content for future recall
+async function main() — STARTUP — runs the readline loop
+
+## WHAT YOU'RE BUILDING
+
+Three iterations, in order. Each one builds on the last.
+
+| Iteration | What it adds | Time |
+|---|---|---|
+| **0** | The brain — askTwin() calls claude -p --session | ~20 min |
+| **1** | Clean terminal interface — labeled lines, clean output | ~15 min |
+| **2** | Memory — recallContext() + remember() + session reuse | ~20 min |
+
+## BUILDING BEHAVIOR
+
+### Resist scope creep
+"That's a later phase. I've noted it. Let's finish the current iteration first."
+
+### Checkpoint = commit
+When a feature works or the person says "checkpoint", commit with git.
+
+## FORBIDDEN
+- Rewrite entire files
+- Add features from later phases
+- Install dependencies without explaining why
+- Import anthropic / openai SDK or use an API key
+- Use Python — everything is Node.js (core.js)
+
+## ALLOWED SHORTCUTS
+- Console.log for error handling
+- Hardcoded values
+- Simple JSON file for memory (no database)
+- No input validation
+- No graceful error recovery — crash is fine for a buildathon
+</script>
+
+<!-- ═══════════════ MAIN SCRIPT ═══════════════ -->
+<script>
+(function(){
+  var META = [
+    {id:'welcome',num:'01',title:'Welcome',subtitle:'What today is — and how to get the most from it',phase:'start',phaseLabel:'Start Here'},
+    {id:'before-you-arrive',num:'02',title:'Laptop Setup',subtitle:'Install everything before you arrive (~15 min)',phase:'start',phaseLabel:'Start Here'},
+    {id:'building-personality',num:'03',title:'Building the Personality',subtitle:'Define how your agent talks (~30 min)',phase:'build',phaseLabel:'Build'},
+    {id:'build-it',num:'04',title:'Build It',subtitle:'Your core agent (~1 hr)',phase:'build',phaseLabel:'Build'},
+    {id:'capabilities',num:'05',title:'Grow Your Twin',subtitle:'Go live on Slack, layer in capabilities (~2 hrs)',phase:'build',phaseLabel:'Build'},
+    {id:'demo',num:'06',title:'Demo',subtitle:'Polish and show it on stage (3:00–4:00)',phase:'build',phaseLabel:'Build'},
+    {id:'troubleshooting',num:'07',title:'Troubleshooting',subtitle:'Stuck? Start here',phase:'help',phaseLabel:'Help'}
+  ];
+
+  var FILE_MAP = {
+    '01-welcome.md':'#welcome','02-before-you-arrive.md':'#before-you-arrive',
+    '03-building-the-personality.md':'#building-personality','04-build-it.md':'#build-it',
+    '05-capabilities.md':'#capabilities','06-demo.md':'#demo','07-troubleshooting.md':'#troubleshooting'
+  };
+
+  META.forEach(function(p){
+    var el=document.querySelector('script[data-id="'+p.id+'"]');
+    p.content=el?el.textContent.trim():'';
+  });
+
+  var starterContent={};
+  document.querySelectorAll('script[data-starter]').forEach(function(el){
+    starterContent[el.dataset.starter]=el.textContent.trim();
+  });
+
+  var currentStarter=null;
+
+  // ── ESCAPING ──
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+  // ── LINK CONVERSION ──
+  function convertLink(href){
+    if(FILE_MAP[href]) return FILE_MAP[href];
+    if(href==='starter-files/IDEATION.md') return 'javascript:void(0)" onclick="event.preventDefault();window.__showStarter(\'IDEATION.md\')';
+    if(href==='starter-files/BUILDING.md') return 'javascript:void(0)" onclick="event.preventDefault();window.__showStarter(\'BUILDING.md\')';
+    return href;
+  }
+
+  // ── INLINE MARKDOWN ──
+  function inlineMd(text){
+    var codes=[];
+    text=text.replace(/`([^`]+)`/g,function(_,c){codes.push(c);return '\x00CODE'+(codes.length-1)+'\x00'});
+    text=text.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>');
+    text=text.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+    text=text.replace(/\*(.+?)\*/g,'<em>$1</em>');
+    text=text.replace(/\[([^\]]+)\]\(([^)]+)\)/g,function(_,t,href){
+      href=convertLink(href);
+      var ext=href.indexOf('http')===0;
+      return '<a href="'+href+'"'+(ext?' target="_blank" rel="noopener"':'')+'>'+t+'</a>';
+    });
+    text=text.replace(/\x00CODE(\d+)\x00/g,function(_,i){return '<code>'+esc(codes[parseInt(i)])+'</code>'});
+    return text;
+  }
+
+  // ── BLOCK MARKDOWN PARSER ──
+  function parseMd(src){
+    var lines=src.split('\n'),html='',i=0;
+    while(i<lines.length){
+      var line=lines[i];
+      if(line.trim()===''){i++;continue}
+      var cm=line.match(/^```(\w*)/);
+      if(cm){var lang=cm[1]||'text';i++;var code='';while(i<lines.length&&!lines[i].match(/^```\s*$/)){code+=lines[i]+'\n';i++}if(i<lines.length)i++;code=esc(code.replace(/\n$/,''));html+='<div class="code-block"><div class="code-header"><span>'+lang+'</span><button class="copy-btn" onclick="window.__copyCode(this)">Copy</button></div><pre><code>'+code+'</code></pre></div>';continue}
+      if(line.match(/^<details/i)){var block=line+'\n';i++;while(i<lines.length&&!lines[i].match(/<\/summary>/i)){block+=lines[i]+'\n';i++}if(i<lines.length){block+=lines[i]+'\n';i++}var inner='';while(i<lines.length&&!lines[i].match(/^<\/details>/i)){inner+=lines[i]+'\n';i++}var sumMatch=block.match(/<summary>(.*?)<\/summary>/i);var sumText=sumMatch?sumMatch[1]:'Details';html+='<details><summary>'+sumText+'</summary><div class="details-body">'+parseMd(inner)+'</div></details>';if(i<lines.length)i++;continue}
+      var hm=line.match(/^(#{1,6})\s+(.+)/);if(hm){html+='<h'+hm[1].length+'>'+inlineMd(hm[2])+'</h'+hm[1].length+'>';i++;continue}
+      if(line.match(/^---+\s*$/)){html+='<hr>';i++;continue}
+      if(line.match(/^>\s?/)){var bq='';while(i<lines.length){if(lines[i].match(/^>\s?/)){bq+=lines[i].replace(/^>\s?/,'')+'\n';i++;continue}if(lines[i].trim()===''&&i+1<lines.length&&lines[i+1]&&lines[i+1].match(/^>/)){bq+='\n';i++;continue}break}html+='<blockquote>'+parseMd(bq)+'</blockquote>';continue}
+      if(line.match(/^\|/)&&i+1<lines.length&&lines[i+1]&&lines[i+1].match(/^\|[\s\-:|]+\|?\s*$/)){var headers=line.split('|').filter(function(c){return c.trim()!==''}).map(function(c){return c.trim()});i+=2;var rows=[];while(i<lines.length&&lines[i]&&lines[i].match(/^\|/)){rows.push(lines[i].split('|').filter(function(c){return c.trim()!==''}).map(function(c){return c.trim()}));i++}html+='<div class="table-wrap"><table><thead><tr>';headers.forEach(function(h){html+='<th>'+inlineMd(h)+'</th>'});html+='</tr></thead><tbody>';rows.forEach(function(row){html+='<tr>';row.forEach(function(cell){html+='<td>'+inlineMd(cell)+'</td>'});html+='</tr>'});html+='</tbody></table></div>';continue}
+      if(line.match(/^[-*]\s/)){html+='<ul>';while(i<lines.length&&lines[i]&&lines[i].match(/^[-*]\s/)){var item=lines[i].replace(/^[-*]\s/,'');i++;while(i<lines.length&&lines[i]&&lines[i].match(/^\s{2,}/)&&!lines[i].match(/^[-*]\s/)&&!lines[i].match(/^\d+\.\s/)){item+=' '+lines[i].trim();i++}var cbm=item.match(/^\[([ x])\]\s*(.*)/);if(cbm){html+='<li class="checkbox"><input type="checkbox" '+(cbm[1]==='x'?'checked':'')+' disabled> '+inlineMd(cbm[2])+'</li>'}else{html+='<li>'+inlineMd(item)+'</li>'}}html+='</ul>';continue}
+      if(line.match(/^\d+\.\s/)){html+='<ol>';while(i<lines.length&&lines[i]&&lines[i].match(/^\d+\.\s/)){var oitem=lines[i].replace(/^\d+\.\s/,'');i++;while(i<lines.length&&lines[i]&&lines[i].match(/^\s{2,}/)&&!lines[i].match(/^\d+\.\s/)&&!lines[i].match(/^[-*]\s/)){oitem+=' '+lines[i].trim();i++}html+='<li>'+inlineMd(oitem)+'</li>'}html+='</ol>';continue}
+      var para='';while(i<lines.length&&lines[i]&&lines[i].trim()!==''&&!lines[i].match(/^#{1,6}\s/)&&!lines[i].match(/^```/)&&!lines[i].match(/^>\s/)&&!lines[i].match(/^[-*]\s/)&&!lines[i].match(/^\d+\.\s/)&&!lines[i].match(/^\|/)&&!lines[i].match(/^---+\s*$/)&&!lines[i].match(/^<details/i)){para+=(para?' ':'')+lines[i];i++}
+      if(para)html+='<p>'+inlineMd(para)+'</p>';
+    }
+    return html;
+  }
+
+  // ── BUILD PANELS ──
+  function buildPanels(){
+    var panelsEl=document.getElementById('panels');
+    var h='';
+    META.forEach(function(page,idx){
+      h+='<div class="section-panel" id="sec-'+page.id+'">';
+      h+='<div class="section-pill">'+page.phaseLabel+'</div>';
+      h+='<div class="section-title">'+page.title+'</div>';
+      h+='<div class="section-sub">'+page.subtitle+'</div>';
+      h+='<div class="md">'+parseMd(page.content)+'</div>';
+      h+='<div class="bottom-nav">';
+      if(idx>0){var prev=META[idx-1];h+='<a class="nav-link prev" href="#'+prev.id+'"><div class="nav-link-label">&larr; Previous</div><div class="nav-link-title">'+prev.title+'</div></a>'}else{h+='<div></div>'}
+      if(idx<META.length-1){var next=META[idx+1];h+='<a class="nav-link next" href="#'+next.id+'"><div class="nav-link-label">Next &rarr;</div><div class="nav-link-title">'+next.title+'</div></a>'}
+      h+='</div></div>';
+    });
+    panelsEl.innerHTML=h;
+  }
+
+  // ── NAVIGATE ──
+  function goToSection(id){
+    document.querySelectorAll('.section-panel').forEach(function(p){p.classList.remove('active')});
+    document.querySelectorAll('.sidebar-item').forEach(function(i){i.classList.remove('active')});
+    var panel=document.getElementById('sec-'+id);
+    if(panel){panel.classList.add('active')}
+    var item=document.querySelector('.sidebar-item[data-section="'+id+'"]');
+    if(item){item.classList.add('active')}
+    window.scrollTo(0,0);
+    window.__closeSidebar();
+  }
+
+  // ── COVER ──
+  window.__dismissCover=function(){
+    var cover=document.getElementById('cover');
+    var hb=document.getElementById('handbook');
+    cover.classList.add('dismissed');
+    hb.classList.remove('cover-active');
+    document.body.classList.add('ready');
+    setTimeout(function(){cover.style.display='none'},700);
+    window.location.hash='welcome';
+  };
+
+  // ── SIDEBAR ITEMS ──
+  document.querySelectorAll('.sidebar-item').forEach(function(item){
+    item.addEventListener('click',function(){
+      window.location.hash=item.dataset.section;
+    });
+  });
+
+  // ── MOBILE SIDEBAR ──
+  window.__toggleSidebar=function(){
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebar-backdrop').classList.toggle('active');
+  };
+  window.__closeSidebar=function(){
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-backdrop').classList.remove('active');
+  };
+
+  // ── MODAL ──
+  window.__showStarter=function(name){
+    currentStarter=name;
+    document.getElementById('modal-title').textContent=name;
+    document.getElementById('modal-content').textContent=starterContent[name]||'';
+    document.getElementById('modal-overlay').classList.add('active');
+  };
+  window.__downloadStarter=function(name){
+    var content=starterContent[name]||'';
+    var blob=new Blob([content],{type:'text/markdown'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download=name;a.click();
+    URL.revokeObjectURL(url);
+  };
+  window.closeModal=function(){
+    document.getElementById('modal-overlay').classList.remove('active');
+    currentStarter=null;
+  };
+  window.copyStarter=function(){
+    if(!currentStarter)return;
+    navigator.clipboard.writeText(starterContent[currentStarter]||'').then(function(){
+      var btn=document.getElementById('modal-copy-btn');var o=btn.textContent;btn.textContent='Copied!';setTimeout(function(){btn.textContent=o},1400);
+    });
+  };
+  window.downloadStarter=function(){if(currentStarter)window.__downloadStarter(currentStarter)};
+  document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)window.closeModal()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')window.closeModal()});
+
+  // ── COPY CODE ──
+  window.__copyCode=function(btn){
+    var pre=btn.closest('.code-block').querySelector('pre');
+    navigator.clipboard.writeText(pre.textContent).then(function(){var o=btn.textContent;btn.textContent='Copied!';setTimeout(function(){btn.textContent=o},1400)});
+  };
+
+  // ── HASH ROUTER ──
+  function route(){
+    var hash=window.location.hash.replace('#','');
+    if(!hash) return;
+    var hb=document.getElementById('handbook');
+    if(hb.classList.contains('cover-active')){
+      var cover=document.getElementById('cover');
+      cover.classList.add('dismissed');
+      hb.classList.remove('cover-active');
+      document.body.classList.add('ready');
+      setTimeout(function(){cover.style.display='none'},700);
+    }
+    goToSection(hash);
+  }
+
+  // ── INIT ──
+  buildPanels();
+  window.addEventListener('hashchange',route);
+  if(window.location.hash){route()}
+})();
+</script>
+</body>
+</html>
