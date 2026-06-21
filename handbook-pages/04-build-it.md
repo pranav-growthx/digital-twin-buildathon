@@ -33,33 +33,50 @@ then build.
 
 > Something breaks? Don't debug it alone — **paste the exact error back to Claude** and let it fix it.
 
-## Iteration 0 — the brain
+## Iteration 0 — the brain (~20 min)
 
-A terminal loop. Type a message, get a reply in your voice via `claude -p --session`, repeat until Ctrl+C.
+A terminal loop. Type a message, get a reply in your voice via `claude -p --session`,
+repeat until Ctrl+C. Your kickoff prompt already starts this.
 
-Your kickoff prompt already starts this — BUILDING.md tells Claude exactly what to build.
 When it's done, run it:
 
 ```bash
 node core.js
 ```
 
-Talk to it for a minute. When it feels right, type `checkpoint` and hit Enter.
+Talk to it for a minute. **The real test:** text it something a friend would say. Does the
+reply sound like you? If the code runs but the voice is off, tell Claude what's wrong —
+*"too formal"*, *"shorter replies"*, *"more sarcasm"* — the fix is in the prompt, not the code.
 
-## Iteration 1 — clean terminal interface
+When it feels right, type `checkpoint` and hit Enter.
 
-Clean up the chat experience — labeled lines, clean formatting. Tell Claude to move to
-iteration 1. BUILDING.md defines what it needs to produce.
+## Iteration 1 — clean terminal interface (~15 min)
 
-Run it, chat with it, then type `checkpoint` and Enter.
+The brain works — now make it pleasant to use. Paste this:
 
-## Iteration 2 — memory with extension points
+```
+Let's continue to iteration 1. Clean up the terminal interface — labeled lines, clean
+formatting. Follow BUILDING.md.
+```
 
-Give it cross-restart memory. Tell Claude to move to iteration 2. BUILDING.md defines the
-`recallContext()` and `remember()` functions it needs to create.
+You should see your agent's name on its replies and `You:` on yours. Chat with it, then
+type `checkpoint` and Enter.
 
-Run it, then test it: tell it something, **fully restart the app**, then ask about it — it
-should still know. Type `checkpoint` and Enter.
+## Iteration 2 — memory (~20 min)
+
+Right now the twin forgets everything when you restart. Paste this:
+
+```
+Let's continue to iteration 2. Add memory with the extension points from BUILDING.md —
+recallContext, remember, and session persistence.
+```
+
+This adds `recallContext()` and `remember()` — the same functions that memory modules will
+replace later with a real engine. For now they use a simple JSON file.
+
+**The test:** tell it something specific ("my favourite coffee is filter kaapi"), fully
+restart the app (`Ctrl+C`, then `node core.js`), then ask "what's my favourite coffee?"
+If it remembers, it works. Type `checkpoint` and Enter.
 
 > You now have an agent that chats like you **and** remembers across restarts, with
 > extension points (`askTwin`, `recallContext`, `remember`) that modules plug into.
