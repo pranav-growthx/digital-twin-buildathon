@@ -29,3 +29,40 @@ Two people with identical tick-box answers can text completely differently. This
 
 **When to introduce:** After v0, when users have used their twin and noticed it doesn't quite
 sound like them. Frame it as "let's fine-tune" rather than front-loading the interview.
+
+---
+
+## Voice Output
+
+Let the twin *speak* its replies using a free, open-source text-to-speech engine that runs
+locally — no paid voice API, no cloud dependency.
+
+**Options:**
+- **Sarvam AI** — Indian-language TTS with natural Hindi/English voices. API-based.
+- **OpenAI TTS** — high-quality, multiple voices, simple API (`tts-1` / `tts-1-hd`).
+- **Gemini TTS** — Google's text-to-speech via the Gemini API. Supports many languages.
+
+**How it would work:** Pipe the twin's text reply through the TTS engine, play the audio
+locally or send it as a voice message on Slack/Discord. Opt-in, not default — text replies
+should always work without TTS installed.
+
+**When to introduce:** After the twin's text voice is dialed in. Voice amplifies whatever
+the text sounds like — if the text is generic, the voice will sound generic. Get the
+personality right first.
+
+---
+
+## Module Ideas (post-buildathon)
+
+Capabilities participants could build after the event, using the MCP + Skills patterns
+they learned:
+
+- **WhatsApp adapter** — same brain, new platform (via Baileys or Twilio)
+- **Notion integration** — read/write Notion pages, query databases
+- **GitHub assistant** — summarize PRs, draft review comments in your voice
+- **Meeting prep** — before a calendar event, pull context from email + Slack + memory and
+  draft a briefing
+- **Daily journal** — scheduled nightly prompt that asks the twin to summarize what happened
+  today, saved to a markdown file
+- **Voice cloning** — train a TTS model on your actual voice recordings (Coqui supports this)
+- **Multi-platform sync** — same twin on Slack + Discord + Telegram, shared memory across all
