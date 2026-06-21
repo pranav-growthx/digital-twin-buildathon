@@ -16,16 +16,14 @@ This is a real build, not a copy-paste tutorial. Parts of it will feel confusing
 
 ## How the day runs
 
-**Kickoff → Build → Demo**, at your own pace. Rough timing for the 3 hours:
+| Time | What |
+|------|------|
+| 11:00 AM | Reporting. Get seated, plug in, last-minute setup help. |
+| 11:30–12:00 | **Build the personality** — define how your twin texts ([details](03-building-the-personality.md)) |
+| 12:00 | Building starts. Open with your "magic moment" — your twin doing one thing that is unmistakably you. |
+| 12:00–3:00 | **Build.** Core agent first (~1 hr), then layer in real capabilities — reading email, drafting replies, scheduling tasks, going live on Slack. |
+| 3:00–4:00 | **Demos.** Show the working thing. No slides. |
 
-| Time | Step | Priority |
-|------|------|----------|
-| ~15 min | Ideation — define your agent | core |
-| ~60 min | Build — it chats in your voice, then remembers | ⭐ core |
-| ~30 min | Go live on Slack | bonus |
-| ~25 min | Add a capability | bonus |
-| ~15 min | Polish + demo | core |
-
-**Do the core first** — an agent that chats like you and remembers. Finish that and you've built something real to demo. Slack and capabilities are bonuses; reach for them if you have time.
+**Do the core first** (~1 hr) — an agent that chats like you and remembers. Then spend the remaining ~2 hours giving it real capabilities: Slack, email, scheduling, memory upgrades. The goal is something you can actually use tomorrow.
 
 One thing before you come: do the quick setup in **[Before You Arrive](02-before-you-arrive.md)** tonight — it saves your first hour for building instead of installing.
