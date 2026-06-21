@@ -36,12 +36,14 @@ wiring in a scheduler. They install via **paste a link into Claude Code**:
 
 ```
 Paste this link and follow the instructions:
-<module repo link>
+https://github.com/pranav-growthx/digital-twin-modules/tree/main/<module-name>
 ```
 
 Claude reads the module's plan, installs dependencies, wires it into your `core.js`, walks
 you through any manual steps (creating a Slack app, connecting Gmail), and verifies it works.
 You don't code these by hand.
+
+All modules live at [github.com/pranav-growthx/digital-twin-modules](https://github.com/pranav-growthx/digital-twin-modules).
 
 ### MCP tools (email, calendar, web search, analytics)
 
@@ -95,12 +97,19 @@ reply in your voice — that's the demo moment.
 
 ### Install the Slack module (~10 min, Claude does this)
 
-Paste the module link into Claude Code and tell it to set up Slack. It will:
+Paste this into Claude Code:
+
+```
+Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modules/tree/main/slack-module and set up Slack for my twin.
+```
+
+It will:
 
 - Upgrade your `core.js` into a Slack bot — same brain, new face
 - Import your `askTwin()` function and call it from the Slack event listener
 - Create per-thread sessions so each Slack conversation has its own memory
-- Add send/edit/delete actions so the twin can post messages on its own
+- Add an MCP server (`slack-mcp.js`) so the twin can send, edit, delete messages on its own
+- Set up a state machine (idle/busy/draining) to prevent double-responses
 - Ask you for the two tokens and put them in `.env`
 
 ### Verify
@@ -124,8 +133,12 @@ Connect Gmail so your twin can read your unread email and draft replies in your 
 
 **Setup:**
 1. Go to [claude.ai/customize/connectors](https://claude.ai/customize/connectors) → connect **Gmail** → sign in → allow read access.
-2. Paste the email module link into Claude Code. It installs a Skill that teaches the twin
-   when and how to read email + draft replies.
+2. Paste this into Claude Code:
+   ```
+   Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modules/tree/main/capabilities-module and set up email capabilities for my twin.
+   ```
+   It installs a Skill that teaches the twin when and how to read email + draft replies, plus
+   an MCP quickstart guide for adding more tools.
 
 **Try it:** Tell your twin "read my emails and draft replies." It reads your unread inbox,
 drafts a reply to each in your voice, and saves them to `drafts/replies-<date>.md`.
@@ -144,10 +157,15 @@ drafts a reply to each in your voice, and saves them to `drafts/replies-<date>.m
 Give your twin a clock. "Send me a hi message at 7:30pm" — it fires at the right time.
 "Every weekday at 9am, summarize my Slack" — it runs unattended.
 
-**Setup:** Paste the scheduler module link into Claude Code. It installs:
-- `schedule.js` — a CLI the twin calls to create jobs
+**Setup:** Paste this into Claude Code:
+```
+Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modules/tree/main/scheduler-module and set up the scheduler for my twin.
+```
+It installs:
 - `scheduler.js` — an engine that fires due jobs (auto-starts inside your twin)
-- A Skill that teaches the twin to schedule things when you ask
+- `scheduler-mcp.js` — an MCP server so the agent can schedule via tools (primary path)
+- `schedule.js` — a CLI fallback for creating jobs
+- Markdown workflow support — write a `.workflow.md` file and the scheduler picks it up
 
 **Try it:** Tell your twin "send me a hi message in 2 minutes." A job appears in
 `data/jobs.json`, and ~2 min later a notification fires.
@@ -164,9 +182,13 @@ You built basic memory in iteration 2 (a JSON file). This replaces your `recallC
 and `remember()` with a real memory engine — so the twin automatically recalls the right
 past detail before every reply.
 
-**Setup:** Paste the memory module link into Claude Code. It installs engram (or Junior's
-SQLite+FTS5 memory store), wires `recall → inject → remember` into your dispatch, and
-replaces your JSON memory with a proper search-and-rank system.
+**Setup:** Paste this into Claude Code:
+```
+Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modules/tree/main/memory-module and set up memory for my twin.
+```
+It installs a SQLite+FTS5 memory store with scored recall, an MCP server (`memory-mcp.js`)
+so the agent can recall/remember via tools, and replaces your JSON memory functions with a
+proper search-and-rank system.
 
 **Try it:** Have a conversation, restart the twin, then ask about something from earlier.
 The twin should recall the right detail without being told to look it up.
