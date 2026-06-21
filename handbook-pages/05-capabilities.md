@@ -138,9 +138,8 @@ Connect Gmail so your twin can read your unread email and draft replies in your 
    ```
    Read PLAN_OF_ACTION.md from https://github.com/pranav-growthx/digital-twin-modules/tree/main/capabilities-module and set up email capabilities for my twin.
    ```
-   It installs a Skill for email reading + reply drafting, a `/reply` command for one-off
-   replies, and an **MCP Quickstart** guide (`MCP_QUICKSTART.md`) that shows you how to add
-   any MCP server to your twin.
+   It installs a Skill for email reading + reply drafting, and an **MCP Quickstart** guide
+   (`MCP_QUICKSTART.md`) that shows you how to add any MCP server to your twin.
 
 **Try it:** Tell your twin "read my emails and draft replies." It reads your unread inbox,
 drafts a reply to each in your voice, and saves them to `drafts/replies-<date>.md`.
@@ -149,7 +148,6 @@ drafts a reply to each in your voice, and saves them to `drafts/replies-<date>.m
 - Summarize your unread inbox — who wants what, at a glance
 - Draft replies in your voice — ready to review and send
 - Triage — separate real emails from noise
-- `/reply <paste a message>` — draft a single reply on demand
 
 > **Read-only by design.** It never sends email or marks anything as read. It only drafts.
 > You review and send yourself.
