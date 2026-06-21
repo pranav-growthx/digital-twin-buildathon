@@ -180,9 +180,28 @@ It installs:
 
 ### Option C: Memory upgrade — real recall
 
-You built basic memory in iteration 2 (a JSON file). This replaces your `recallContext()`
-and `remember()` with a real memory engine — so the twin automatically recalls the right
-past detail before every reply.
+You built basic memory in iteration 2 (a JSON file). Upgrade it to a real engine so the
+twin automatically recalls the right past detail before every reply. Pick one:
+
+**Option C1: engram** (recommended — hybrid semantic + lexical recall)
+
+[engram](https://github.com/anmolmoses/engram-memory) is an associative memory engine:
+hybrid retrieval (semantic vectors + FTS5 lexical, fused with Reciprocal Rank Fusion),
+a graph of typed edges between memories with spreading-activation recall, and "dreaming"
+consolidation that promotes proven memories and archives noise. One SQLite file, no API key
+needed (offline hashing embedder by default).
+
+**Setup:** Paste this into Claude Code:
+```
+Read the agent integration guide from https://github.com/anmolmoses/engram-memory and wire engram into my twin as the memory engine. Replace my recallContext() and remember() functions with engram's recall and add APIs. My twin is Node.js ESM with core.js exporting askTwin, recallContext, and remember.
+```
+It will:
+- Install engram: `npm install github:anmolmoses/engram-memory`
+- Replace your `recallContext()` with `engram.recall(query, { k: 5, markUsed: true })`
+- Replace your `remember()` with `engram.add({ content, tier: "episodic", importance: 5 })`
+- Optionally set up nightly `engram.dream()` for consolidation
+
+**Option C2: Built-in FTS module** (simpler — keyword search only)
 
 **Setup:** Paste this into Claude Code:
 ```
@@ -195,14 +214,18 @@ It installs:
   consolidate stale memories via tools
 - `memory-cli.js` — a CLI for inspecting and managing memories manually
 
-**Try it:** Have a conversation, restart the twin, then ask about something from earlier.
-The twin should recall the right detail without being told to look it up.
+**Try it (either option):** Have a conversation, restart the twin, then ask about something
+from earlier. The twin should recall the right detail without being told to look it up.
 
-**What it does:**
+**What you get with either:**
 - Remember facts, preferences, people, decisions — durably across restarts
 - Recall relevant context automatically — before every reply
 - Answer "what did we discuss about X?" — query your own history
 - Self-improving — memories that prove useful get promoted; noise gets forgotten
+
+**engram adds:** semantic recall ("dentist" finds "tooth pain"), associative graph traversal
+(related memories surface even if worded differently), emotion tagging, and a built-in
+dashboard to visualize the memory graph.
 
 ### Option D: Any MCP tool — plug in anything
 
